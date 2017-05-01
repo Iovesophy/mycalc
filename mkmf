@@ -1,0 +1,13 @@
+#!/bin/sh
+make -f Makeobj clean;
+if [ -f ./depends ]; then
+	'mv' depends depends.bak
+fi
+for file in *.c
+do
+	gcc -MM $file >> depends
+done
+if [ -f ./Makefile ]; then
+	'mv' Makefile Makefile.bak
+fi
+cat Makeobj depends > Makefile

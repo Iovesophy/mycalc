@@ -1,0 +1,34 @@
+TARGET = calc
+OBJS = \
+  lex.yy.o\
+  y.tab.o\
+  create.o\
+  eval.o\
+  interface.o\
+  util.o\
+  error.o\
+  main.o\
+  ./memory/mem.o\
+  ./debug/dbg.o
+CFLAGS = -c -g -Wall
+INCLUDES = \
+
+$(TARGET):$(OBJS)
+	cd ./memory; make;
+	cd ./debug; make;
+	cc $(OBJS) -o $@ -lreadline -ly -ll -lm
+clean:
+	rm -f *.o lex.yy.c y.tab.c y.tab.h *~
+y.tab.h : calc.y
+	yacc -dv calc.y
+y.tab.c : calc.y
+	yacc -dv calc.y
+lex.yy.c : calc.l calc.y y.tab.h
+	lex calc.l
+y.tab.o: y.tab.c calc.h MEM.h
+	$(CC) -c -g $*.c $(INCLUDES)
+lex.yy.o: lex.yy.c calc.h MEM.h
+	$(CC) -c -g $*.c $(INCLUDES)
+.c.o:
+	$(CC) $(CFLAGS) $*.c $(INCLUDES)
+############################################################

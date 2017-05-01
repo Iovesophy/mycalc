@@ -1,0 +1,12 @@
+#!/bin/sh
+if [ -f ./depends ]; then
+	'mv' depends depends.bak
+fi
+for file
+do
+	gcc -MM $file -I ../../include >> depends
+done
+if [ -f ./Makefile ]; then
+	'mv' Makefile Makefile.bak
+fi
+cat Makeobj depends > Makefile
